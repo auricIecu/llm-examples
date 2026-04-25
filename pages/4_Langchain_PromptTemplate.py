@@ -1,6 +1,9 @@
 import streamlit as st
 from langchain.llms import OpenAI
 from langchain.prompts import PromptTemplate
+from styles import apply_liquid_glass
+
+apply_liquid_glass()
 
 st.title("🦜🔗 Langchain - Blog Outline Generator App")
 

@@ -2,6 +2,9 @@ from openai import OpenAI
 import streamlit as st
 from streamlit_feedback import streamlit_feedback
 import trubrics
+from styles import apply_liquid_glass, loading_bird_html
+
+apply_liquid_glass()
 
 with st.sidebar:
     openai_api_key = st.text_input("OpenAI API Key", key="feedback_api_key", type="password")
@@ -35,11 +38,13 @@ if prompt := st.chat_input(placeholder="Tell me a joke about sharks"):
         st.info("Please add your OpenAI API key to continue.")
         st.stop()
     client = OpenAI(api_key=openai_api_key)
-    response = client.chat.completions.create(model="gpt-3.5-turbo", messages=messages)
-    st.session_state["response"] = response.choices[0].message.content
     with st.chat_message("assistant"):
+        placeholder = st.empty()
+        placeholder.markdown(loading_bird_html(), unsafe_allow_html=True)
+        response = client.chat.completions.create(model="gpt-3.5-turbo", messages=messages)
+        st.session_state["response"] = response.choices[0].message.content
         messages.append({"role": "assistant", "content": st.session_state["response"]})
-        st.write(st.session_state["response"])
+        placeholder.write(st.session_state["response"])
 
 if st.session_state["response"]:
     feedback = streamlit_feedback(
