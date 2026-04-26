@@ -164,9 +164,35 @@ _LOADING_BIRD_HTML = """
 """
 
 
+CONVERSATION_STARTERS = [
+    ("✍️ Resumir", "Resumime en 5 viñetas las ideas principales del libro 'Atomic Habits' de James Clear."),
+    ("🌐 Traducir", "Traducí al inglés: 'Espero que tengas un excelente día y mucha suerte con tu proyecto.'"),
+    ("💡 Ideas", "Dame 3 ideas de proyectos pequeños para aprender Python usando APIs públicas."),
+]
+
+
+CAPABILITIES = [
+    "📝 Resumir textos largos",
+    "🌐 Traducir entre idiomas",
+    "💻 Explicar y depurar código",
+    "💡 Generar ideas y brainstorm",
+    "❓ Responder preguntas generales",
+]
+
+
+TONE_OPTIONS = ["Formal", "Neutral", "Casual"]
+
+
 def apply_liquid_glass() -> None:
     st.markdown(_LIQUID_GLASS_CSS, unsafe_allow_html=True)
 
 
 def loading_bird_html() -> str:
     return _LOADING_BIRD_HTML
+
+
+def system_prompt(tone: str, refine_mode: str | None = None) -> str:
+    base = f"Use a {tone.lower()} tone. Match the user's language."
+    if refine_mode == "shorter":
+        base += " Provide a noticeably more concise version of your previous response — same substance, fewer words."
+    return base
